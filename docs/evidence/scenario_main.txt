@@ -1,0 +1,13 @@
+mini-redis> OK
+mini-redis> OK
+mini-redis> OK
+mini-redis> OK
+mini-redis> (nil)
+mini-redis> used_memory:22
+maxmemory:30
+evicted_keys:1
+mini-redis> 1. "user:2"
+2. "user:3"
+mini-redis> (integer) 1
+mini-redis> (integer) 2
+mini-redis> 

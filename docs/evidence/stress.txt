@@ -1,0 +1,8 @@
+[PASS] 30000회 무작위 연산(SET/GET/DEL/EXPIRE/TTL/KEYS + 시간경과) 불변식 검증 통과
+  검증한 불변식:
+   1) used_memory >= 0  (음수 불가)
+   2) used_memory == 실제 Σ(len(key)+len(value))  (정확한 추적)
+   3) store.size == nodes.size == lru.size  (자료구조 정합성)
+   4) used_memory <= maxmemory  (한계 준수)
+   5) expires의 모든 키가 store에 존재  (고아 엔트리 없음)
+  최종 상태: store=16 mem=149 evicted=2824

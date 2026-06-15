@@ -1,0 +1,33 @@
+########## 증거 A: LRU 자동 제거 (used_memory 갱신 + evicted_keys) ##########
+CONFIG SET maxmemory 30
+SET user:1 "Alice"  -> used_memory=11
+SET user:2 "Bob"  -> used_memory=20
+SET user:3 "Charlie"  -> used_memory=22
+GET user:1 -> None  (가장 오래된 키가 제거됨)
+INFO memory -> used_memory:22 maxmemory:30 evicted_keys:1
+남은 keys -> ['user:2', 'user:3']
+
+########## 증거 B: LRU 접근순서 반영 (GET이 MRU로 승격) ##########
+4키 저장 후 keys=['a', 'b', 'c', 'd'] mem=16
+GET a  (a를 MRU로 승격 -> LRU는 b)
+SET e xxx (한계초과) -> evict b
+결과 keys=['a', 'c', 'd', 'e'], b 존재? 0
+
+########## 증거 C: OOM (단일 엔트리 초과 / 기존값 보존) ##########
+SET k abc -> OK (mem=4)
+SET k xxxxxxxxxxxxxxxxxxxx -> OOMError 발생 (저장 거부)
+GET k -> "abc" (기존값 보존됨)
+
+########## 증거 D: TTL + 힙 기반 만료 ##########
+EXPIRE k 3 -> 1
+TTL k -> 3  (힙 size=1, peek=(1003.0, 'k'))
+(1초 경과) TTL k -> 2
+(추가 3초 경과) GET k -> None  / TTL k -> -2
+DBSIZE 호출 후 힙 정리됨 -> heap size=0
+
+########## 증거 E: 해시맵 로드팩터 0.75 초과 시 2배 확장 ##########
+초기 capacity=4 (임계 = 4*0.75 = 3)
+put a -> size=1 load_factor=0.25 capacity=4
+put b -> size=2 load_factor=0.50 capacity=4
+put c -> size=3 load_factor=0.75 capacity=4
+put d -> size=4 load_factor=0.50 capacity=8

@@ -1,0 +1,6 @@
+mini-redis> (error) ERR value is not an integer or out of range
+mini-redis> (error) ERR wrong number of arguments for 'get' command
+mini-redis> (error) ERR unknown command 'HELLO'
+mini-redis> (error) ERR value is not an integer or out of range
+mini-redis> (error) ERR Protocol error: unbalanced quotes in request
+mini-redis> 
