@@ -380,3 +380,33 @@ python3 -m unittest discover -s tests -v
 | 보너스 | 스택/큐/덱 · 이진 트리 순회 · BST |
 
 TTL 테스트는 가짜 시계(`FakeClock`)를 주입해 `sleep` 없이 결정론적으로 검증한다.
+
+---
+
+## 🚀 실행 방법
+
+### 설치
+```bash
+pip install -r requirements.txt  # 표준 라이브러리만 사용
+```
+
+### 실행
+```bash
+python mini_redis/main.py
+```
+
+---
+
+## 🧪 테스트 방법
+
+### 자동 테스트
+```bash
+python -m pytest tests/ -v
+```
+
+### 수동 테스트
+1. `put key value` → 저장 확인
+2. `get key` → 값 반환 확인
+3. `delete key` → 삭제 확인
+4. 대량 데이터 입력 → O(1) 탐색 성능 확인
+5. 충돌 상황 → 체이닝/개방주소법 동작 확인
